@@ -2,9 +2,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="referrer" content="origin">
-        <link rel="stylesheet" type="text/css" href="news-komQdNDGcjeLMaEJvryo.css">
-        <link rel="shortcut icon" href="favicon.ico">
-          <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.rss">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='news.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <!-- <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.rss"> -->
         <script type="text/javascript">
 function hide(id) {
   var el = document.getElementById(id);
@@ -32,7 +32,7 @@ function vote(node) {
               <tr>
                 <td style="width:18px;padding-right:4px">
                   <a href="http://www.ycombinator.com">
-                    <img src="y18.gif" width="18" height="18" style="border:1px #ffffff solid;">
+                    <img src="{{ url_for('static', filename='y18.gif') }}" width="18" height="18" style="border:1px #ffffff solid;">
                   </a>
                 </td>
                 <td style="line-height:12pt; height:10px;">
@@ -1220,44 +1220,44 @@ function vote(node) {
                 </tr>
               </table>
               <br>
-                <center>
-                  <span class="yclinks">
-                    <a href="http://news.ycombinator.com/newsguidelines.html">Guidelines
-                    </a>
-                    |
-                    <a href="http://news.ycombinator.com/newsfaq.html">FAQ
-                    </a>
-                    |
-                    <a href="mailto:hn@ycombinator.com">Support
-                    </a>
-                    |
-                    <a href="https://github.com/HackerNews/API">API
-                    </a>
-                    |
-                    <a href="http://news.ycombinator.com/security.html">Security
-                    </a>
-                    |
-                    <a href="http://news.ycombinator.com/lists">Lists
-                    </a>
-                    |
-                    <a href="http://news.ycombinator.com/bookmarklet.html">Bookmarklet
-                    </a>
-                    |
-                    <a href="http://news.ycombinator.com/dmca.html">DMCA
-                    </a>
-                    |
-                    <a href="http://www.ycombinator.com/apply/">Apply to YC
-                    </a>
-                    |
-                    <a href="mailto:hn@ycombinator.com">Contact
-                    </a>
-                  </span>
-                  <br>
-                    <br>
-                <form method="get" action="//hn.algolia.com/">Search:
-                  <input type="text" name="q" value="" size="17">
-                </form>
-                </center>
+              <!-- <center>
+              <span class="yclinks">
+              <a href="http://news.ycombinator.com/newsguidelines.html">Guidelines
+              </a>
+              |
+              <a href="http://news.ycombinator.com/newsfaq.html">FAQ
+              </a>
+              |
+              <a href="mailto:hn@ycombinator.com">Support
+              </a>
+              |
+              <a href="https://github.com/HackerNews/API">API
+              </a>
+              |
+              <a href="http://news.ycombinator.com/security.html">Security
+              </a>
+              |
+              <a href="http://news.ycombinator.com/lists">Lists
+              </a>
+              |
+              <a href="http://news.ycombinator.com/bookmarklet.html">Bookmarklet
+              </a>
+              |
+              <a href="http://news.ycombinator.com/dmca.html">DMCA
+              </a>
+              |
+              <a href="http://www.ycombinator.com/apply/">Apply to YC
+              </a>
+              |
+              <a href="mailto:hn@ycombinator.com">Contact
+              </a>
+              </span>
+              <br>
+              <br>
+               <form method="get" action="//hn.algolia.com/">Search:
+              <input type="text" name="q" value="" size="17">
+              </form>
+    </center> -->
           </td>
         </tr>
       </table>
