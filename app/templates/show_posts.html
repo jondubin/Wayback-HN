@@ -1,0 +1,54 @@
+{% for post in stories %}
+<tr class='athing'>
+    <td align="right" valign="top" class="title">
+    <span class="rank"> {{ loop.index + (30 * page_num) }}
+    </span>
+    </td>
+    <td>
+    <center>
+    <a id="#" href="#">
+    <div class="votearrow" title="upvote">
+    </div>
+    </a>
+    </center>
+    </td>
+    <td class="title">
+    <span class="deadmark">
+    </span>
+    <a href="{{ post.url}}">{{ post.title}}
+    </a>
+    <span class="sitebit comhead">
+        {% if post.sitebit %}({{ post.sitebit }}){% endif %}
+    </span>
+    </td>
+    </tr>
+    <tr>
+    <td colspan="2">
+    </td>
+    <td class="subtext">
+        <span class="score" id="score_9540094">
+            {% if post.points == 1 %}
+                1 point
+            {% else %}
+                {{post.points}} points
+            {% endif %}
+    </span> by
+    <a href="https://news.ycombinator.com/user?id={{ post.author }}">{{ post.author }}
+    </a>
+    <a href="https://news.ycombinator.com/item?id={{ post.objectID }}">{{ days_ago }}
+    </a>                  |
+    <a href="https://news.ycombinator.com/item?id={{ post.objectID }}">
+           {% if post.num_comments == 1 %}
+                1 comment
+            {% else %}
+                {{post.num_comments}} comments
+            {% endif %}
+    </a>
+    </td>
+    </tr>
+
+    <tr class="spacer" style="height:5px">
+    </tr>
+{% else %}
+    <span>No stories on this day</span>
+{% endfor %}
