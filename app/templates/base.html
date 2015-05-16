@@ -16,14 +16,14 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
               <tr>
                 <td style="width:18px;padding-right:4px">
-                  <a href="http://www.ycombinator.com">
+                  <a href="http://www.news.ycombinator.com">
                     <img src="{{ url_for('static', filename='y18.gif') }}" width="18" height="18" style="border:1px #ffffff solid;">
                   </a>
                 </td>
                 <td style="line-height:12pt; height:10px;">
                   <span class="pagetop">
                     <b>
-                      <a href="/">Hacker News
+                      <a href="/">Best of HN
                       </a>
                     </b>
                     <span> - {{ curr_day_formatted }}</span>
@@ -32,7 +32,7 @@
                   </a> |
                     <a href="/?date={{ prev_day_string }}">Prev
                   </a> |
-                    <a href="http://news.ycombinator.com/show">Random
+                    <a href="/?date=random">Random
                   </a> |
                     <a href="/?date={{ next_day_string  }}"> Next
                   </a> |
