@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 {% for post in stories %}
 <tr class='athing'>
     <td align="right" valign="top" class="title">
@@ -52,3 +54,4 @@
 {% else %}
     <span>No stories on this day</span>
 {% endfor %}
+{% endblock %}

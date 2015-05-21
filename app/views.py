@@ -1,10 +1,11 @@
 from flask import render_template, request, redirect
-#from urlparse import urlparse
+#from enum import Enum
 import tldextract
 from app import app
 # from __init__ import get_stories_around_time
 # from __init__ import get_time_years_ago
 import calendar
+import utils
 import datetime
 import requests
 import pprint
@@ -18,6 +19,11 @@ pp = pprint.PrettyPrinter(indent=4)
 #     delta = dt - epoch
 #     return delta.total_seconds()
 
+# class RangeType(Enum):
+#     day = 1
+#     month = 2
+#     year = 3
+
 
 def find_segment_with_period(segment_list):
     for segment in segment_list:
@@ -28,30 +34,6 @@ def find_segment_with_period(segment_list):
 def get_sitebit(url):
     ext = tldextract.extract(url)
     return "{}.{}".format(ext.domain, ext.suffix)
-    # split_by_slashes = (url).split("/")
-
-    # segment = find_segment_with_period(split_by_slashes)
-    # split_by_periods = (segment).split(".")
-    # sitebit = ".".join(split_by_periods[-2:])
-    # return sitebit
-
-
-# def get_stories_around_time(time):
-#     stories = []
-#     first_page = get_json_from_page(time, 0)
-#     num_pages = first_page["nbPages"]
-#     for page_number in range(0, num_pages + 1):
-#         json_response = get_json_from_page(time, page_number)
-#         for story in json_response["hits"]:
-#             del story["_highlightResult"]
-#             print story["url"]
-#             if story["url"]:
-#                 story["sitebit"] = get_sitebit(story["url"])
-#             else:
-#                 story["url"] = "https://news.ycombinator.com/item?id={}".format(story["objectID"])
-#             pp.pprint(story)
-#             stories.append(story)
-#     return stories
 
 
 def get_stories_and_pages_with_bounds(start_posix, end_posix, page_num):
@@ -83,19 +65,33 @@ def get_stories_and_pages_with_bounds(start_posix, end_posix, page_num):
 # TODO: west coast time instead of UTC by using POSIX everywhere (even today)
 # TODO: do for weeks, months, years
 # TODO: 404 page
+# TODO: refactor
+
 
 def get_start_and_end_posix(string_date):
     month_day_year_tuple = tuple(string_date.split('-'))
-    month = int(month_day_year_tuple[1])
-    day = int(month_day_year_tuple[2])
+    date_segments = len(month_day_year_tuple)
     year = int(month_day_year_tuple[0])
-    start_datetime = datetime.datetime(year, month, day, 0, 0, 0)
-    end_datetime = datetime.datetime(year, month, day, 23, 59, 59)
+    if date_segments == 3:
+        startMonth = endMonth = int(month_day_year_tuple[1])
+        startDay = endDay = int(month_day_year_tuple[2])
+    elif date_segments == 2:
+        startMonth = endMonth = int(month_day_year_tuple[1])
+        startDay = 1
+        endDay = calendar.monthrange(year, startMonth)[1]
+    elif date_segments == 1:
+        startMonth = 1
+        endMonth = 12
+        startDay = 1
+        endDay = 31
+    start_datetime = datetime.datetime(year, startMonth, startDay, 0, 0, 0)
+    end_datetime = datetime.datetime(year, endMonth, endDay, 23, 59, 59)
     start_posix = calendar.timegm(start_datetime.timetuple())
     end_posix = calendar.timegm(end_datetime.timetuple())
     return (start_posix, end_posix)
 
 
+@utils.invalid_input_decorator
 def get_datetime_date(string_date):
     month_day_year_tuple = tuple(string_date.split('-'))
     month = int(month_day_year_tuple[1])
@@ -104,6 +100,7 @@ def get_datetime_date(string_date):
     return datetime.date(year, month, day)
 
 
+@utils.invalid_input_decorator
 def get_stories_and_pages(string_date, page_num):
     start_and_end_posix = get_start_and_end_posix(string_date)
     start_posix = start_and_end_posix[0]
@@ -125,6 +122,15 @@ def get_days_ago_str(datetime_date):
         return "{} days ago".format(days_ago)
 
 
+def get_years_ago_str(years_ago):
+    if years_ago == 0:
+        return "this year"
+    elif years_ago == 1:
+        return "1 year ago"
+    else:
+        return "{} years ago".format(years_ago)
+
+
 def get_random_date_bounded(start, end):
     return start + datetime.timedelta(
         seconds=random.randint(0, int((end-start).total_seconds())))
@@ -142,36 +148,51 @@ def index():
     string_date = request.args.get('date')
     if string_date is None:
         return redirect("/?date={}".format(today_date.isoformat()))
-        # string_date = datetime.date.today().isoformat()
     elif string_date == "random":
         string_date = get_random_date().isoformat()
         return redirect("/?date={}".format(string_date))
-    datetime_date = get_datetime_date(string_date)
-    next_day_datetime = datetime_date + datetime.timedelta(days=1)
-    next_day_string = next_day_datetime.isoformat()
-    prev_day_datetime = datetime_date - datetime.timedelta(days=1)
-    prev_day_string = prev_day_datetime.isoformat()
 
-    curr_day_formatted = "{:%b %d, %Y}".format(datetime_date)
+    date_split = string_date.split("-")
+    date_components = len(date_split)
+    if date_components == 1:
+        prev_string = int(string_date) - 1
+        next_string = int(string_date) + 1
+        curr_formatted = string_date
+        days_ago_str = get_years_ago_str(today_date.year - int(string_date))
+    elif date_components == 2:
+        # prev_string = int(string_date) - 1
+        # next_string = int(string_date) + 1
+        # curr_formatted = string_date
+        # days_ago_str = get_years_ago_str(today_date.year - int(string_date))
+        pass
+    elif date_components == 3:
+        datetime_date = get_datetime_date(string_date)
+        next_day_datetime = datetime_date + datetime.timedelta(days=1)
+        next_string = next_day_datetime.isoformat()
+        prev_day_datetime = datetime_date - datetime.timedelta(days=1)
+        prev_string = prev_day_datetime.isoformat()
+        curr_formatted = "{:%b %d, %Y}".format(datetime_date)
+        days_ago_str = get_days_ago_str(datetime_date)
 
     page_num = request.args.get('p')
     if page_num is None:
         page_num = 0
     else:
         page_num = int(page_num)
+
     stories_and_pages = get_stories_and_pages(string_date, page_num)
     stories = stories_and_pages[0]
     num_pages = stories_and_pages[1]
-    days_ago_str = get_days_ago_str(datetime_date)
+
     if page_num < num_pages - 1:
         next_page_num = page_num + 1
     else:
         next_page_num = None
-    return render_template('base.html',
+    return render_template('show_posts.html',
                            stories=stories,
                            page_num=page_num,
                            next_page_num=next_page_num,
-                           prev_day_string=prev_day_string,
-                           next_day_string=next_day_string,
-                           curr_day_formatted=curr_day_formatted,
+                           prev_string=prev_string,
+                           next_string=next_string,
+                           curr_day_formatted=curr_formatted,
                            days_ago=days_ago_str)
