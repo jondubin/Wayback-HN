@@ -28,7 +28,7 @@
                     </b>
                     <span> - {{ curr_day_formatted }}</span>
                     <img src="s.gif" height="1" width="10">
-                    <a href="/?date=2006-10-9">First
+                    <a href="/?date={{ first_date }}">First
                   </a> |
                     <a href="/?date={{ prev_string }}">Prev
                   </a> |
@@ -36,11 +36,7 @@
                   </a> |
                     <a href="/?date={{ next_string  }}"> Next
                   </a> |
-                    <a href="/">Last
-                        <!-- </a> |
-                        <a href="submit.html">submit
-                        </a> -->
-                  </span>
+                    <a href="/?date={{ last_date }}">Last</a></span>
                 </td>
 
                 </td>

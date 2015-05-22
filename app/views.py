@@ -175,12 +175,15 @@ def index():
         curr_formatted = string_date
         days_ago_str = get_years_ago_str(today_date.year - int(string_date))
         no_stories_text = "No stories in"
+        first_date = "2006-10-9"
     elif date_components == 2:
         # prev_string = int(string_date) - 1
         # next_string = int(string_date) + 1
         # curr_formatted = string_date
         # days_ago_str = get_years_ago_str(today_date.year - int(string_date))
         no_stories_text = "No stories on"
+        first_date = "2006-10"
+        last_date = "{}-{}".format(today_date.year, today_date.month)
         pass
     elif date_components == 3:
         datetime_date = get_datetime_date(string_date)
@@ -191,6 +194,8 @@ def index():
         curr_formatted = "{:%b %d, %Y}".format(datetime_date)
         days_ago_str = get_days_ago_str(datetime_date)
         no_stories_text = "No stories on"
+        first_date = "2006"
+        last_date = "{}".format(today_date.year)
 
     page_num = request.args.get('p')
     if page_num is None:
@@ -217,4 +222,6 @@ def index():
                            next_string=next_string,
                            curr_day_formatted=curr_formatted,
                            days_ago=days_ago_str,
-                           no_stories_text=no_stories_text)
+                           no_stories_text=no_stories_text,
+                           first_date=first_date,
+                           last_date=last_date)
