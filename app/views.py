@@ -91,7 +91,6 @@ def get_start_and_end_posix(string_date):
     return (start_posix, end_posix)
 
 
-@utils.invalid_input_decorator
 def get_datetime_date(string_date):
     month_day_year_tuple = tuple(string_date.split('-'))
     month = int(month_day_year_tuple[1])
@@ -100,7 +99,19 @@ def get_datetime_date(string_date):
     return datetime.date(year, month, day)
 
 
-@utils.invalid_input_decorator
+def check_if_valid_date(string_date):
+    date_components = string_date.split("-")
+    num_date_components = len(date_components)
+    if num_date_components < 1 or num_date_components > 3:
+        return False
+    for component in date_components:
+        try:
+            int(component)
+        except ValueError:
+            return False
+    return True
+
+
 def get_stories_and_pages(string_date, page_num):
     start_and_end_posix = get_start_and_end_posix(string_date)
     start_posix = start_and_end_posix[0]
@@ -151,19 +162,25 @@ def index():
     elif string_date == "random":
         string_date = get_random_date().isoformat()
         return redirect("/?date={}".format(string_date))
+    else:
+        is_valid_date = check_if_valid_date(string_date)
+        if not is_valid_date:
+            return render_template('invalid_input.html')
 
     date_split = string_date.split("-")
     date_components = len(date_split)
-    if date_components == 1:
+    if date_components == 1:  # year
         prev_string = int(string_date) - 1
         next_string = int(string_date) + 1
         curr_formatted = string_date
         days_ago_str = get_years_ago_str(today_date.year - int(string_date))
+        no_stories_text = "No stories in"
     elif date_components == 2:
         # prev_string = int(string_date) - 1
         # next_string = int(string_date) + 1
         # curr_formatted = string_date
         # days_ago_str = get_years_ago_str(today_date.year - int(string_date))
+        no_stories_text = "No stories on"
         pass
     elif date_components == 3:
         datetime_date = get_datetime_date(string_date)
@@ -173,6 +190,7 @@ def index():
         prev_string = prev_day_datetime.isoformat()
         curr_formatted = "{:%b %d, %Y}".format(datetime_date)
         days_ago_str = get_days_ago_str(datetime_date)
+        no_stories_text = "No stories on"
 
     page_num = request.args.get('p')
     if page_num is None:
@@ -180,7 +198,10 @@ def index():
     else:
         page_num = int(page_num)
 
-    stories_and_pages = get_stories_and_pages(string_date, page_num)
+    try:
+        stories_and_pages = get_stories_and_pages(string_date, page_num)
+    except ValueError:
+        return render_template('invalid_input.html')
     stories = stories_and_pages[0]
     num_pages = stories_and_pages[1]
 
@@ -195,4 +216,5 @@ def index():
                            prev_string=prev_string,
                            next_string=next_string,
                            curr_day_formatted=curr_formatted,
-                           days_ago=days_ago_str)
+                           days_ago=days_ago_str,
+                           no_stories_text=no_stories_text)
