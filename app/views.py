@@ -52,21 +52,6 @@ def get_stories_and_pages_with_bounds(start_posix, end_posix, page_num):
 
     return (json_response["hits"], num_pages)
 
-# TODO: only show more when they are more pages
-# TODO: cache, but refresh cache weekly
-# TODO: rank counter
-# TODO: webarchive link
-# TODO: time or days ago
-# TODO: weeks
-# TODO: if date before or after first/last date, go to first/last
-# TODO: show date in header
-# TODO: cache older stories not newer ones
-# TODO: move code out of views
-# TODO: west coast time instead of UTC by using POSIX everywhere (even today)
-# TODO: do for weeks, months, years
-# TODO: 404 page
-# TODO: refactor
-
 
 def get_start_and_end_posix(string_date):
     month_day_year_tuple = tuple(string_date.split('-'))
@@ -178,6 +163,8 @@ def index():
         first_date = "2006"
         last_date = today_date.year
     elif date_components == 2:
+        year = date_split[0]
+        month = date_split[1]
         # prev_string = int(string_date) - 1
         # next_string = int(string_date) + 1
         # curr_formatted = string_date

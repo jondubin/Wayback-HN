@@ -1,0 +1,25 @@
+* only show more when they are more pages
+#+STARTUP: hidestars
+
+* Tasks
+** TODO cache, but refresh cache weekly
+** DONE Display each post's rank
+   CLOSED: [2015-05-23 Sat 14:01]
+** TODO Use the WebArchive API to put links to archived versions of each page
+   Also cache these requests
+** TODO time or days ago
+** TODO if date before or after first/last date, go to first/last
+** DONE Show the current date in the header
+   CLOSED: [2015-05-23 Sat 14:02]
+** TODO cache older stories not newer ones
+** TODO Move code out of the views file
+** TODO west coast time instead of UTC by using POSIX everywhere (even today)
+** TODO do for weeks, months, years
+** TODO 404 page
+** TODO Handle case where algolia search is down
+** TODO cache requests
+** TODO Change the variable names to accommodate years and months
+** TODO Make random work for months and years
+
+* Someday
+** TODO Make the page reactive
