@@ -4,9 +4,9 @@
       <meta name="referrer" content="origin">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='news.css') }}">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <!-- <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.rss"> -->
-        <title>Hacker News archive
-        </title>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="{{ url_for('static', filename='wayback-hn.js') }}"></script>
+        <title>Wayback HN</title>
   </head>
   <body>
     <center>
@@ -23,23 +23,29 @@
                 <td style="line-height:12pt; height:10px;">
                   <span class="pagetop">
                     <b>
-                      <a href="/">Best of HN
-                      </a>
+                      <a href="/">Wayback Hacker News</a>
                     </b>
-                    <span> - {{ curr_day_formatted }}</span>
-                    <img src="s.gif" height="1" width="10">
-                    <a href="/?date={{ first_date }}">First
-                  </a> |
-                    <a href="/?date={{ prev_string }}">Prev
-                  </a> |
-                    <a href="/?date=random">Random
-                  </a> |
-                    <a href="/?date={{ next_string  }}"> Next
-                  </a> |
-                    <a href="/?date={{ last_date }}">Last</a></span>
-                </td>
+                    <span> - {{ date_input.curr_date_formatted }}</span>
+                    <img src="{{ url_for('static', filename='s.gif') }}" height="1" width="10">
+                    <a href="/?date={{ date_input.first_date }}">First</a> |
+                    <a href="/?date={{ date_input.prev_date_str }}">Prev</a> |
+                    <a id="random-link" href="/?date=random-{{ date_input.day_month_or_year }}">
+                       Random <span id="random-text">{{ date_input.day_month_or_year }}</span>
+                       </a> |
+                    <a href="/?date={{ date_input.next_date_str }}"> Next</a> |
+                    <a href="/?date={{ date_input.last_date }}">Last</a>
 
-                </td>
+                    <form id="mode-form" style="margin: 0; padding: 0; float: right;">
+                    <span>
+                        <b>Mode:</b>
+                        Day <input id="day" type="radio" name="mode" value="day">
+                        Month <input id="month" type="radio" name="mode" value="month">
+                        Year <input id="year" type="radio" name="mode" value="year">
+                    </span>
+                    </form>
+
+                    </span>
+                </td></td>
               </tr>
             </table>
           </td>
@@ -49,12 +55,15 @@
         <tr>
           <td>
         <table border="0" cellpadding="0" cellspacing="0">
+            {% if not is_valid_input %}
+                Date input is invalid, here are stories from today:
+                <br>
+                <br>
+            {% endif %}
             {% block content %}{% endblock %}
-                <tr class="morespace" style="height:10px">
-                </tr>
+                <tr class="morespace" style="height:10px"></tr>
                 <tr>
-                  <td colspan="2">
-                  </td>
+                  <td colspan="2"></td>
                   <td class="title">
                       {% if next_page_num %}
                       <a href="?p={{ next_page_num }}" rel="nofollow">More</a>
@@ -66,7 +75,7 @@
         </tr>
         <tr>
           <td>
-              <!-- <img src="s.gif" height="10" width="0"> -->
+              <img src="{{ url_for('static', filename='s.gif') }}" height="10" width="0">
               <table width="100%" cellspacing="0" cellpadding="1">
                 <tr>
                   <td bgcolor="#ff6600">
@@ -74,47 +83,75 @@
                 </tr>
               </table>
               <br>
-              <!-- <center>
-              <span class="yclinks">
-              <a href="http://news.ycombinator.com/newsguidelines.html">Guidelines
+              <center>
+              <span class="Github">
+              <a href="https://github.com/jondubin/HN-Wayback">
+                  <img src="{{ url_for('static', filename='github.png') }}" height="20">
               </a>
-              |
-              <a href="http://news.ycombinator.com/newsfaq.html">FAQ
-              </a>
-              |
-              <a href="mailto:hn@ycombinator.com">Support
-              </a>
-              |
-              <a href="https://github.com/HackerNews/API">API
-              </a>
-              |
-              <a href="http://news.ycombinator.com/security.html">Security
-              </a>
-              |
-              <a href="http://news.ycombinator.com/lists">Lists
-              </a>
-              |
-              <a href="http://news.ycombinator.com/bookmarklet.html">Bookmarklet
-              </a>
-              |
-              <a href="http://news.ycombinator.com/dmca.html">DMCA
-              </a>
-              |
-              <a href="http://www.ycombinator.com/apply/">Apply to YC
-              </a>
-              |
-              <a href="mailto:hn@ycombinator.com">Contact
-              </a>
+{#              |#}
+{#              <a href="http://news.ycombinator.com/newsfaq.html">FAQ#}
+{#              </a>#}
+{#              |#}
+{#              <a href="mailto:hn@ycombinator.com">Support#}
+{#              </a>#}
+{#              |#}
+{#              <a href="https://github.com/HackerNews/API">API#}
+{#              </a>#}
+{#              |#}
+              {#              <a href="http://news.ycombinator.com/security.html">Security#}
+{#              </a>#}
+{#              |#}
+{#              <a href="http://news.ycombinator.com/lists">Lists#}
+{#              </a>#}
+{#              |#}
+{#              <a href="http://news.ycombinator.com/bookmarklet.html">Bookmarklet#}
+{#              </a>#}
+{#              |#}
+{#              <a href="http://news.ycombinator.com/dmca.html">DMCA#}
+{#              </a>#}
+{#              |#}
+{#              <a href="http://www.ycombinator.com/apply/">Apply to YC#}
+{#              </a>#}
+{#              |#}
+{#              <a href="mailto:hn@ycombinator.com">Contact#}
+{#              </a>#}
               </span>
               <br>
               <br>
-               <form method="get" action="//hn.algolia.com/">Search:
-              <input type="text" name="q" value="" size="17">
-              </form>
-    </center> -->
+{#               <form method="get" action="//hn.algolia.com/">Search:#}
+{#              <input type="text" name="q" value="" size="17">#}
+{#              </form>#}
+        </center>
           </td>
         </tr>
       </table>
     </center>
+
+  <script>
+
+
+
+    var original_mode = "{{ date_input.day_month_or_year }}";
+
+    $('#{{ date_input.day_month_or_year }}').prop("checked", true);
+
+    $(function() {
+        $("input:radio[name=mode]").click(function () {
+           var value = $(this).val();
+           var url;
+            if (value !== original_mode) {
+                if (value === "day") {
+                    url = "current-day";
+                } else if (value === "month") {
+                    url = "current-month";
+                } else if (value === "year") {
+                    url = "current-year";
+                }
+                window.location.replace("/?date=" + url);
+            }
+
+      });
+    });
+  </script>
   </body>
 </html>
