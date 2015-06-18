@@ -6,4 +6,3 @@ itsdangerous==0.24
 requests==2.7.0
 requests-cache==0.4.10
 tldextract==1.6
-wsgiref==0.1.2
