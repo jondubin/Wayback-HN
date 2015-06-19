@@ -3,6 +3,7 @@ import calendar
 import time
 import random
 import datetime
+import pytz
 import requests_cache
 
 
@@ -11,6 +12,12 @@ SECONDS_IN_4_DAYS = 4 * SECONDS_IN_A_DAY
 
 cache_recent = requests_cache.CachedSession(cache_name='recent', expire_after=300)
 cache_old = requests_cache.CachedSession(cache_name='old', expire_after=SECONDS_IN_4_DAYS)
+
+pacific = pytz.timezone('US/Pacific-New')
+
+
+def get_todays_date():
+    return datetime.datetime.now(pacific).date()
 
 
 def find_segment_with_period(segment_list):
@@ -40,10 +47,10 @@ def get_start_and_end_posix(string_date):
         endMonth = 12
         startDay = 1
         endDay = 31
-    start_datetime = datetime.datetime(year, startMonth, startDay, 0, 0, 0)
-    end_datetime = datetime.datetime(year, endMonth, endDay, 23, 59, 59)
-    start_posix = calendar.timegm(start_datetime.timetuple())
-    end_posix = calendar.timegm(end_datetime.timetuple())
+    start_datetime = datetime.datetime(year, startMonth, startDay, 0, 0, 0, tzinfo=pacific)
+    end_datetime = datetime.datetime(year, endMonth, endDay, 23, 59, 59, tzinfo=pacific)
+    start_posix = int(start_datetime.strftime("%s"))
+    end_posix = int(end_datetime.strftime("%s"))
     return start_posix, end_posix
 
 
@@ -52,7 +59,7 @@ def get_datetime_date(string_date):
     month = int(month_day_year_tuple[1])
     day = int(month_day_year_tuple[2])
     year = int(month_day_year_tuple[0])
-    return datetime.date(year, month, day)
+    return datetime.datetime(year, month, day, tzinfo=pacific).date()
 
 
 def is_valid_date(string_date):
@@ -70,7 +77,7 @@ def is_valid_date(string_date):
         except ValueError:
             return False
     try:
-        datetime.date(int(date_components[0]), int(date_components[1]), int(date_components[2]))
+        datetime.datetime(int(date_components[0]), int(date_components[1]), int(date_components[2]), tzinfo=pacific).date()
     except:
         return False
     return True
@@ -107,7 +114,7 @@ def get_stories_and_pages_from_json(json_response):
 
 
 def get_days_ago_str(datetime_date):
-    days_ago_delta = datetime.date.today() - datetime_date
+    days_ago_delta = get_todays_date() - datetime_date
     days_ago = days_ago_delta.days
     if days_ago == 0:
         return "today"
@@ -132,7 +139,7 @@ def get_random_date_bounded(start, end):
 
 
 def get_months_ago(year, month):
-    todays_date = datetime.date.today()
+    todays_date = get_todays_date()
     curr_year = todays_date.year
     curr_month = todays_date.month
     months_ago = 12 * (curr_year - year) + (curr_month - month)
@@ -149,9 +156,8 @@ def get_months_ago_str(months_ago):
 
 
 def get_random_date():
-    today = datetime.date.today()
-    first_date = datetime.date(2006, 10, 9)
-    return get_random_date_bounded(first_date, today)
+    first_date = datetime.datetime(2006, 10, 9, tzinfo=pacific).date()
+    return get_random_date_bounded(first_date, get_todays_date())
 
 
 def get_next_prev_month_year(curr_month, curr_year):

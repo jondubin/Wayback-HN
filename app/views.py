@@ -1,18 +1,19 @@
 from flask import render_template, request, redirect, url_for
 from app import app
-import datetime
 import os
 import json
 from date_input import DateInput
 from utils import (get_random_date,
                    is_valid_date,
                    get_stories_and_pages,
-                   get_stories_and_pages_from_json)
+                   get_stories_and_pages_from_json,
+                   get_todays_date)
+
 
 
 @app.route('/')
 def index():
-    todays_date = datetime.date.today()
+    todays_date = get_todays_date()
     date_str = request.args.get('date', default=todays_date.isoformat())
     page_num = request.args.get('p', default=0, type=int)
 
@@ -40,6 +41,7 @@ def index():
     else:
         message = None
 
+    print todays_date.isoformat()
     date_input = DateInput(date_str, todays_date)
 
     try:
@@ -51,7 +53,6 @@ def index():
         with open(os.path.dirname(os.path.realpath(__file__)) + '/static/first_day.json') as json_file:
             json_response = json.load(json_file)
             stories = get_stories_and_pages_from_json(json_response)[0]
-            print stories
         return render_template('show_posts.html',
                                 date_input=date_input,
                                 stories=stories,
