@@ -1,13 +1,13 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from app import app
 import datetime
+import os
+import json
 from date_input import DateInput
 from utils import (get_random_date,
                    is_valid_date,
-                   get_years_ago_str,
-                   get_datetime_date,
-                   get_days_ago_str,
-                   get_stories_and_pages)
+                   get_stories_and_pages,
+                   get_stories_and_pages_from_json)
 
 
 @app.route('/')
@@ -34,16 +34,29 @@ def index():
         elif date_str_split[1] == "year":
             return redirect("/?date={}".format(todays_date.year))
 
-
-    if is_valid_date(date_str):
-        is_valid_input = True
-    else:
-        is_valid_date(date_str)
+    if not is_valid_date(date_str):
         date_str = todays_date.isoformat()
-        is_valid_input = False
+        message = "Date input is invalid, here are stories from today:"
+    else:
+        message = None
 
     date_input = DateInput(date_str, todays_date)
-    stories_and_pages = get_stories_and_pages(date_str, page_num)
+
+    try:
+        stories_and_pages = get_stories_and_pages(date_str, page_num)
+    except Exception:
+        message = "We had trouble fetching stories (our server might be having a rough time). " \
+                  "Instead, here are stories from the first day Hacker News was online:"
+        date_input = DateInput("2006-10-9", todays_date)
+        with open(os.path.dirname(os.path.realpath(__file__)) + '/static/first_day.json') as json_file:
+            json_response = json.load(json_file)
+            stories = get_stories_and_pages_from_json(json_response)[0]
+            print stories
+        return render_template('show_posts.html',
+                                date_input=date_input,
+                                stories=stories,
+                                message=message,
+                                page_num=1)
 
     stories = stories_and_pages[0]
     num_pages = stories_and_pages[1]
@@ -58,4 +71,4 @@ def index():
                            stories=stories,
                            page_num=page_num,
                            next_page_num=next_page_num,
-                           is_valid_input=is_valid_input)
+                           message=message)

@@ -34,7 +34,6 @@ class DateInput(object):
         self.next_date_str = int(date_str) + 1
         self.curr_date_formatted = date_str
         self.days_ago_str = get_years_ago_str(self.todays_date.year - int(date_str))
-        self.no_stories_text = "No stories in"
         self.first_date = "2006"
         self.last_date = self.todays_date.year
         self.day_month_or_year = "year"
@@ -47,7 +46,6 @@ class DateInput(object):
         self.prev_date_str = next_prev_month_year[1]
         self.curr_date_formatted = "{} {}".format(month_abbr[month], year)
         self.days_ago_str = get_months_ago_str(get_months_ago(year, month))
-        self.no_stories_text = "No stories on"
         self.first_date = "2006-10"
         self.last_date = "{}-{}".format(self.todays_date.year, self.todays_date.month)
         self.day_month_or_year = "month"
@@ -60,7 +58,6 @@ class DateInput(object):
         self.next_date_str = next_day_datetime.isoformat()
         self.curr_date_formatted = "{:%b %d, %Y}".format(datetime_date)
         self.days_ago_str = get_days_ago_str(datetime_date)
-        self.no_stories_text = "No stories on"
         self.first_date = "2006-10-9"
         self.last_date = self.todays_date.isoformat()
         self.day_month_or_year = "day"

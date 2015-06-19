@@ -1,8 +1,16 @@
 import tldextract
 import calendar
-import requests
+import time
 import random
 import datetime
+import requests_cache
+
+
+SECONDS_IN_A_DAY = 60 * 60 * 24
+SECONDS_IN_4_DAYS = 4 * SECONDS_IN_A_DAY
+
+cache_recent = requests_cache.CachedSession(cache_name='recent', expire_after=300)
+cache_old = requests_cache.CachedSession(cache_name='old', expire_after=SECONDS_IN_4_DAYS)
 
 
 def find_segment_with_period(segment_list):
@@ -76,8 +84,16 @@ def get_stories_and_pages(string_date, page_num):
     date_filter_url = ("numericFilters=created_at_i>{0},created_at_i<{1}"
                       .format(start_posix, end_posix))
     page_query = "&page={}&hitsPerPage=30".format(page_num)
-    r = requests.get(base_url + date_filter_url + page_query)
+    if time.time() - start_posix <= SECONDS_IN_4_DAYS:
+        r = cache_recent.get(base_url + date_filter_url + page_query)
+    else:
+        r = cache_old.get(base_url + date_filter_url + page_query)
+    r.raise_for_status()
     json_response = r.json()
+    return get_stories_and_pages_from_json(json_response)
+
+
+def get_stories_and_pages_from_json(json_response):
     num_pages = json_response["nbPages"]
     hits = json_response["hits"]
     for story in hits:
@@ -87,7 +103,6 @@ def get_stories_and_pages(string_date, page_num):
             story["url"] = ("https://news.ycombinator.com/item?id={}"
                            .format(story["objectID"]))
     stories = json_response["hits"]
-    #print stories
     return stories, num_pages
 
 

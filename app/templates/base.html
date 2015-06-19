@@ -27,7 +27,7 @@
                     <b>
                       <a href="/">Wayback Hacker News</a>
                     </b>
-                    <span> - <input type="text" id="datepicker"></span>
+{#                    <span> - <input type="text" id="datepicker"></span>#}
                     <span> - {{ date_input.curr_date_formatted }}</span>
                     <img src="{{ url_for('static', filename='images/s.gif') }}" height="1" width="10">
                     <a href="/?date={{ date_input.first_date }}">First</a> |
@@ -41,8 +41,8 @@
                     <form id="mode-form" style="margin: 0; padding: 0; float: right;">
                     <span>
                         <b>Mode:</b>
-                        Day <input id="day" type="radio" name="mode" value="day">
-                        Month <input id="month" type="radio" name="mode" value="month">
+                        Day <input id="day" type="radio" name="mode" value="day"> |
+                        Month <input id="month" type="radio" name="mode" value="month"> |
                         Year <input id="year" type="radio" name="mode" value="year">
                     </span>
                     </form>
@@ -58,8 +58,8 @@
         <tr>
           <td>
         <table border="0" cellpadding="0" cellspacing="0">
-            {% if not is_valid_input %}
-                Date input is invalid, here are stories from today:
+            {% if message %}
+                {{ message }}
                 <br>
                 <br>
             {% endif %}
@@ -132,7 +132,7 @@
 
   <script>
 
-    $('#datepicker').datepicker('show');
+{#    $('#datepicker').datepicker('show');#}
 
     var original_mode = "{{ date_input.day_month_or_year }}";
 
