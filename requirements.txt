@@ -10,6 +10,7 @@ itsdangerous==0.24
 mccabe==0.3
 pep8==1.5.7
 pyflakes==0.9.0
+pytz==2015.4
 requests==2.7.0
 requests-cache==0.4.10
 rope==0.10.2
