@@ -2,10 +2,12 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="referrer" content="origin">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='news.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/news.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/datepicker.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="{{ url_for('static', filename='wayback-hn.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/wayback-hn.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
         <title>Wayback HN</title>
   </head>
   <body>
@@ -17,7 +19,7 @@
               <tr>
                 <td style="width:18px;padding-right:4px">
                   <a href="http://www.news.ycombinator.com">
-                    <img src="{{ url_for('static', filename='y18.gif') }}" width="18" height="18" style="border:1px #ffffff solid;">
+                    <img src="{{ url_for('static', filename='images/y18.gif') }}" width="18" height="18" style="border:1px #ffffff solid;">
                   </a>
                 </td>
                 <td style="line-height:12pt; height:10px;">
@@ -25,8 +27,9 @@
                     <b>
                       <a href="/">Wayback Hacker News</a>
                     </b>
+                    <span> - <input type="text" id="datepicker"></span>
                     <span> - {{ date_input.curr_date_formatted }}</span>
-                    <img src="{{ url_for('static', filename='s.gif') }}" height="1" width="10">
+                    <img src="{{ url_for('static', filename='images/s.gif') }}" height="1" width="10">
                     <a href="/?date={{ date_input.first_date }}">First</a> |
                     <a href="/?date={{ date_input.prev_date_str }}">Prev</a> |
                     <a id="random-link" href="/?date=random-{{ date_input.day_month_or_year }}">
@@ -75,7 +78,7 @@
         </tr>
         <tr>
           <td>
-              <img src="{{ url_for('static', filename='s.gif') }}" height="10" width="0">
+              <img src="{{ url_for('static', filename='images/s.gif') }}" height="10" width="0">
               <table width="100%" cellspacing="0" cellpadding="1">
                 <tr>
                   <td bgcolor="#ff6600">
@@ -86,7 +89,7 @@
               <center>
               <span class="Github">
               <a href="https://github.com/jondubin/HN-Wayback">
-                  <img src="{{ url_for('static', filename='github.png') }}" height="20">
+                  <img src="{{ url_for('static', filename='images/github.png') }}" height="20">
               </a>
 {#              |#}
 {#              <a href="http://news.ycombinator.com/newsfaq.html">FAQ#}
@@ -129,7 +132,7 @@
 
   <script>
 
-
+    $('#datepicker').datepicker('show');
 
     var original_mode = "{{ date_input.day_month_or_year }}";
 
