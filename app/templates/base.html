@@ -28,7 +28,7 @@
                       <a href="/">Wayback Hacker News</a>
                     </b>
 {#                    <span> - <input type="text" id="datepicker"></span>#}
-                    <span> - {{ date_input.curr_date_formatted }}</span>
+                    <span> - <a href="?date={{ date_input.date_str  }}"> {{ date_input.curr_date_formatted }}</a></span>
                     <img src="{{ url_for('static', filename='images/s.gif') }}" height="1" width="10">
                     <a href="/?date={{ date_input.first_date }}">First</a> |
                     <a href="/?date={{ date_input.prev_date_str }}">Prev</a> |
@@ -68,8 +68,8 @@
                 <tr>
                   <td colspan="2"></td>
                   <td class="title">
-                      {% if next_page_num %}
-                      <a href="?p={{ next_page_num }}" rel="nofollow">More</a>
+                      {% if next_page_url %}
+                      <a href="{{ next_page_url }}" rel="nofollow">More</a>
                       {% endif %}
                   </td>
                 </tr>
@@ -87,43 +87,19 @@
               </table>
               <br>
               <center>
-              <span class="Github">
-              <a href="https://github.com/jondubin/HN-Wayback">
-                  <img src="{{ url_for('static', filename='images/github.png') }}" height="20">
+
+               <span class="footer">
+
+                 made by <a style="color: #000099;" href="http://jonathandub.in">Jonathan Dubin
               </a>
-{#              |#}
-{#              <a href="http://news.ycombinator.com/newsfaq.html">FAQ#}
-{#              </a>#}
-{#              |#}
-{#              <a href="mailto:hn@ycombinator.com">Support#}
-{#              </a>#}
-{#              |#}
-{#              <a href="https://github.com/HackerNews/API">API#}
-{#              </a>#}
-{#              |#}
-              {#              <a href="http://news.ycombinator.com/security.html">Security#}
-{#              </a>#}
-{#              |#}
-{#              <a href="http://news.ycombinator.com/lists">Lists#}
-{#              </a>#}
-{#              |#}
-{#              <a href="http://news.ycombinator.com/bookmarklet.html">Bookmarklet#}
-{#              </a>#}
-{#              |#}
-{#              <a href="http://news.ycombinator.com/dmca.html">DMCA#}
-{#              </a>#}
-{#              |#}
-{#              <a href="http://www.ycombinator.com/apply/">Apply to YC#}
-{#              </a>#}
-{#              |#}
-{#              <a href="mailto:hn@ycombinator.com">Contact#}
-{#              </a>#}
+              </a>
+              |
+              <a style="color: #000099;"
+              href="https://github.com/jondubin/HN-Wayback">Source on
+              GitHub</a>                 
               </span>
               <br>
               <br>
-{#               <form method="get" action="//hn.algolia.com/">Search:#}
-{#              <input type="text" name="q" value="" size="17">#}
-{#              </form>#}
         </center>
           </td>
         </tr>
