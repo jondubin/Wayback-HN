@@ -1,4 +1,4 @@
-# HN-Wayback
+# Wayback-HN
 
 A cross between Hacker News and the Wayback Machine. View old front pages / top stories on HN, by day, month, and year.
 
