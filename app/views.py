@@ -40,7 +40,6 @@ def index():
     else:
         message = None
 
-    print todays_date.isoformat()
     date_input = DateInput(date_str, todays_date)
 
     try:
