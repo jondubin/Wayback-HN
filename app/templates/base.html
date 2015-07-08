@@ -28,7 +28,7 @@
                       <a href="/">Wayback Hacker News</a>
                     </b>
 {#                    <span> - <input type="text" id="datepicker"></span>#}
-                    <span> - {{ date_input.curr_date_formatted }}</span>
+                    <span> - <a href="?date={{ date_input.date_str  }}"> {{ date_input.curr_date_formatted }}</a></span>
                     <img src="{{ url_for('static', filename='images/s.gif') }}" height="1" width="10">
                     <a href="/?date={{ date_input.first_date }}">First</a> |
                     <a href="/?date={{ date_input.prev_date_str }}">Prev</a> |
@@ -68,8 +68,8 @@
                 <tr>
                   <td colspan="2"></td>
                   <td class="title">
-                      {% if next_page_num %}
-                      {# <a href="?p={{ next_page_num }}" rel="nofollow">More</a> #}
+                      {% if next_page_url %}
+                      <a href="{{ next_page_url }}" rel="nofollow">More</a>
                       {% endif %}
                   </td>
                 </tr>

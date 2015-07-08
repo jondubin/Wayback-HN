@@ -62,12 +62,13 @@ def index():
 
     if page_num < num_pages - 1:
         next_page_num = page_num + 1
+        next_page_url = "?date={}&p={}".format(date_str, next_page_num)
     else:
-        next_page_num = None
-
+        next_page_url = None
+    
     return render_template('show_posts.html',
                            date_input=date_input,
                            stories=stories,
                            page_num=page_num,
-                           next_page_num=next_page_num,
+                           next_page_url=next_page_url,
                            message=message)
