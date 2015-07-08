@@ -10,7 +10,7 @@ import requests_cache
 SECONDS_IN_A_DAY = 60 * 60 * 24
 SECONDS_IN_4_DAYS = 4 * SECONDS_IN_A_DAY
 
-cache_recent = requests_cache.CachedSession(cache_name='recent', expire_after=300)
+cache_recent = requests_cache.CachedSession(cache_name='recent', expire_after=1800)
 cache_old = requests_cache.CachedSession(cache_name='old', expire_after=SECONDS_IN_4_DAYS)
 
 pacific = pytz.timezone('US/Pacific-New')
@@ -49,8 +49,8 @@ def get_start_and_end_posix(string_date):
         endDay = 31
     start_datetime = datetime.datetime(year, startMonth, startDay, 0, 0, 0, tzinfo=pacific)
     end_datetime = datetime.datetime(year, endMonth, endDay, 23, 59, 59, tzinfo=pacific)
-    start_posix = int(start_datetime.strftime("%s"))
-    end_posix = int(end_datetime.strftime("%s"))
+    start_posix = int(start_datetime.strftime("%s")) + 21600
+    end_posix = int(end_datetime.strftime("%s")) + 21600
     return start_posix, end_posix
 
 
@@ -167,7 +167,7 @@ def get_next_prev_month_year(curr_month, curr_year):
     else:
         next_year = curr_year
     next_month_year = "{}-{}".format(next_year, next_month)
-        
+
     prev_month = (curr_month - 2) % 12 + 1
     if prev_month == 12:
         prev_year = curr_year - 1
