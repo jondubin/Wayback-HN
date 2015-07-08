@@ -10,7 +10,6 @@ from utils import (get_random_date,
                    get_todays_date)
 
 
-
 @app.route('/')
 def index():
     todays_date = get_todays_date()
@@ -41,7 +40,6 @@ def index():
     else:
         message = None
 
-    print todays_date.isoformat()
     date_input = DateInput(date_str, todays_date)
 
     try:
@@ -64,12 +62,13 @@ def index():
 
     if page_num < num_pages - 1:
         next_page_num = page_num + 1
+        next_page_url = "?date={}&p={}".format(date_str, next_page_num)
     else:
-        next_page_num = None
-
+        next_page_url = None
+    
     return render_template('show_posts.html',
                            date_input=date_input,
                            stories=stories,
                            page_num=page_num,
-                           next_page_num=next_page_num,
+                           next_page_url=next_page_url,
                            message=message)
