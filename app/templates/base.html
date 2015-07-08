@@ -116,11 +116,11 @@
            var url;
             if (value !== original_mode) {
                 if (value === "day") {
-                    url = "current-day";
+                    url = "{{ date_input.switch_to_day  }}";
                 } else if (value === "month") {
-                    url = "current-month";
+                    url = "{{ date_input.switch_to_month }}";
                 } else if (value === "year") {
-                    url = "current-year";
+                    url = "{{ date_input.switch_to_year }}";
                 }
                 window.location.replace("/?date=" + url);
             }

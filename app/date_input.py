@@ -21,6 +21,9 @@ class DateInput(object):
         self.first_date = None
         self.last_date = None
         self.day_month_or_year = None
+        self.switch_to_year = None
+        self.switch_to_month = None
+        self.switch_to_day = None
         num_date_components  = len(self.date_split_by_dashes)
         if num_date_components == 1:
             self.initialize_year(date_str)
@@ -37,6 +40,9 @@ class DateInput(object):
         self.first_date = "2006"
         self.last_date = self.todays_date.year
         self.day_month_or_year = "year"
+        self.switch_to_year = date_str
+        self.switch_to_month = "{}-1".format(date_str)
+        self.switch_to_day = "{}-1-1".format(date_str)
 
     def initialize_year_month(self, date_str):
         year = int(self.date_split_by_dashes[0])
@@ -49,6 +55,9 @@ class DateInput(object):
         self.first_date = "2006-10"
         self.last_date = "{}-{}".format(self.todays_date.year, self.todays_date.month)
         self.day_month_or_year = "month"
+        self.switch_to_year = self.date_split_by_dashes[0]
+        self.switch_to_month = date_str
+        self.switch_to_day = "{}-1".format(date_str)
 
     def initialize_year_month_day(self, date_str):
         datetime_date = get_datetime_date(date_str)
@@ -61,4 +70,8 @@ class DateInput(object):
         self.first_date = "2006-10-9"
         self.last_date = self.todays_date.isoformat()
         self.day_month_or_year = "day"
+        self.switch_to_year = self.date_split_by_dashes[0]
+        self.switch_to_month = "{}-{}".format(self.date_split_by_dashes[0],
+                                              self.date_split_by_dashes[1])
+        self.switch_to_day = date_str
 
