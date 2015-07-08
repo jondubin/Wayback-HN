@@ -10,7 +10,6 @@ from utils import (get_random_date,
                    get_todays_date)
 
 
-
 @app.route('/')
 def index():
     todays_date = get_todays_date()
@@ -41,7 +40,6 @@ def index():
     else:
         message = None
 
-    print todays_date.isoformat()
     date_input = DateInput(date_str, todays_date)
 
     try:
