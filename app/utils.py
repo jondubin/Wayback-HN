@@ -105,7 +105,7 @@ def get_stories_and_pages_from_json(json_response):
     num_pages = json_response["nbPages"]
     hits = json_response["hits"]
     for story in hits:
-        if story["url"]:
+        if story.get("url"):
             story["sitebit"] = get_sitebit(story["url"])
         else:
             story["url"] = ("https://news.ycombinator.com/item?id={}"
