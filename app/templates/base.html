@@ -68,9 +68,9 @@
                 <tr>
                   <td colspan="2"></td>
                   <td class="title">
-                     {# {% if next_page_url %} #}
-                   {#    <a href="{{ next_page_url }}" rel="nofollow">More</a> #}
-                    {#   {% endif %} #}
+                     {% if next_page_url %} 
+                       <a href="{{ next_page_url }}" rel="nofollow">More</a> 
+                       {% endif %} 
                   </td>
                 </tr>
         </table>
@@ -88,7 +88,7 @@
               <br>
               <center>
               <span class="footer">
-              problems? email <a href = "mailto:waybackhn@gmail.com">waybackhn@gmail.com</a>
+              questions/problems? email <a href = "mailto:waybackhn@gmail.com">waybackhn@gmail.com</a>
               <!--made by <a style="color: #000099;" href="http://jonathandub.in">Jonathan Dubin-->
               <!--</a>-->
               <!--|-->

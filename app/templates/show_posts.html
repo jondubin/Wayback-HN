@@ -1,57 +1,50 @@
-{% extends "base.html" %}
-{% block content %}
-{% for story in stories %}
-<tr class='athing'>
-    <td align="right" valign="top" class="title">
-    <span class="rank"> {{ loop.index + (30 * page_num) }}
-    </span>
-    </td>
-    <td>
-    <center>
+{% extends "base.html" %} {% block content %} {% for story in stories %}
+<tr class="athing">
+  <td align="right" valign="top" class="title">
+    <span class="rank"> {{ loop.index + (30 * page_num) }} </span>
+  </td>
+  <td>
+    <!-- deviation from original HN styling, I replaced the arrow with some empty characters -->
+    <span>&nbsp;&nbsp;</span>
+    <!--  original styling below -->
+    <!-- <center>
     <a id="#" href="#">
     <div class="votearrow" title="upvote">
     </div>
     </a>
-    </center>
-    </td>
-    <td class="title">
-    <span class="deadmark">
-    </span>
-    <a href="{{ story.url }}">{{ story.title }}
-    </a>
+    </center> -->
+  </td>
+  <td class="title">
+    <span class="deadmark"> </span>
+    <a href="{{ story.url }}">{{ story.title }} </a>
     <span class="sitebit comhead">
-        {% if story.sitebit %}({{ story.sitebit }}){% endif %}
+      {% if story.sitebit %}({{ story.sitebit }}){% endif %}
     </span>
-    </td>
-    </tr>
-    <tr>
-    <td colspan="2">
-    </td>
-    <td class="subtext">
-        <span class="score" id="score_9540094">
-            {% if story.points == 1 %}
-                1 point
-            {% else %}
-                {{story.points}} points
-            {% endif %}
-    </span> by
-    <a href="https://news.ycombinator.com/user?id={{ story.author }}">{{ story.author }}
+  </td>
+</tr>
+<tr>
+  <td colspan="2"></td>
+  <td class="subtext">
+    <span class="score" id="score_9540094">
+      {% if story.points == 1 %} 1 point {% else %} {{story.points}} points {%
+      endif %}
+    </span>
+    by
+    <a href="https://news.ycombinator.com/user?id={{ story.author }}"
+      >{{ story.author }}
     </a>
-    <a href="https://news.ycombinator.com/item?id={{ story.objectID }}">{{ date_input.days_ago_str }}
-    </a>                  |
+    <a href="https://news.ycombinator.com/item?id={{ story.objectID }}"
+      >{{ date_input.days_ago_str }}
+    </a>
+    |
     <a href="https://news.ycombinator.com/item?id={{ story.objectID }}">
-           {% if story.num_comments == 1 %}
-                1 comment
-            {% else %}
-                {{story.num_comments}} comments
-            {% endif %}
+      {% if story.num_comments == 1 %} 1 comment {% else %}
+      {{story.num_comments}} comments {% endif %}
     </a>
-    </td>
-    </tr>
+  </td>
+</tr>
 
-    <tr class="spacer" style="height:5px">
-    </tr>
+<tr class="spacer" style="height: 5px"></tr>
 {% else %}
-    <span>No stories from {{date_input.curr_date_formatted}}</span>
-{% endfor %}
-{% endblock %}
+<span>No stories from {{date_input.curr_date_formatted}}</span>
+{% endfor %} {% endblock %}
