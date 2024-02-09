@@ -12,7 +12,7 @@ SECONDS_IN_7_DAYS = 7 * SECONDS_IN_A_DAY
 SECONDS_IN_4_DAYS = 3 * SECONDS_IN_A_DAY
 
 cache_recent = requests_cache.CachedSession(cache_name='recent', expire_after=2400)
-cache_old = requests_cache.CachedSession(cache_name='old', expire_after=SECONDS_IN_7_DAYS)
+cache_old = requests_cache.CachedSession(cache_name='old', expire_after=SECONDS_IN_4_DAYS)
 
 pacific = pytz.timezone('US/Pacific-New')
 
